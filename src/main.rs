@@ -1,46 +1,10 @@
+mod camera;
+mod sphere;
 mod vector;
 
+use camera::Camera;
+use sphere::{Intersection, Sphere};
 use vector::Vector3;
-
-pub struct Sphere {
-    position: Vector3,
-    radius: f64,
-    color: [u8; 3]
-}
-
-pub struct Camera {
-    origin: Vector3,
-    sensor_width: u32,
-    sensor_height: u32,
-    field_of_view: f64,
-}
-
-pub enum Intersection {
-    None,
-    Distance(f64)
-}
-
-impl Sphere {
-    pub fn intersect(&self, o: Vector3, dir: Vector3) -> Intersection {
-        let voc = self.position - o;      // Vector from the origin to the sphere center
-        let voc_len_sqr = voc.dot(&voc);  // The length squared of voc
-        let vod_len = voc.dot(&dir);      // The length of the projected vector voc into the ray direction
-
-        let a_sqr = voc_len_sqr - (vod_len * vod_len);  // The length squared of the line between c and the ray
-        let r_sqr = self.radius * self.radius;          // Radius squared
-
-        if a_sqr < self.radius * self.radius {    // the ray is inside the sphere
-
-            let b = (r_sqr - a_sqr).sqrt();
-            let vod_prime_len = vod_len - b;  // the distance between o and the intersection with the sphere
-
-            return Intersection::Distance(vod_prime_len)
-        }
-        else {
-            return Intersection::None
-        }
-    }
-}
 
 fn render(c: &Camera, spheres: &Vec<Sphere>) {
     let mut imgbuf = image::ImageBuffer::new(c.sensor_width, c.sensor_height);
@@ -58,7 +22,6 @@ fn render(c: &Camera, spheres: &Vec<Sphere>) {
         let ray = Vector3::new(i, j, -1.0).normalize();
 
         // casting ray
-
         let mut color = image::Rgb([0x11, 0x33, 0x66]);
         let mut distance = std::f64::INFINITY;
 
@@ -88,21 +51,21 @@ fn main() {
         field_of_view: std::f64::consts::PI / 3.0,
     };
 
-    let spheres = vec! [
+    let spheres = vec![
         Sphere {
             position: Vector3::new(0.0, 0.0, -10.0),
             radius: 3.0,
-            color: [0x99, 0x0, 0x0]
+            color: [0x99, 0x0, 0x0],
         },
         Sphere {
             position: Vector3::new(0.0, 0.0, -5.0),
             radius: 0.5,
-            color: [0x0, 0x99, 0]
+            color: [0x0, 0x99, 0],
         },
         Sphere {
             position: Vector3::new(-2.0, 0.0, -7.0),
             radius: 1.5,
-            color: [0xff, 0xd7, 0x0]
+            color: [0xff, 0xd7, 0x0],
         },
     ];
 
