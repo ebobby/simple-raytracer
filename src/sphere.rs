@@ -21,11 +21,18 @@ impl Sphere {
         let a_sqr = voc_len_sqr - (vod_len * vod_len); // The length squared of the line between c and the ray
         let r_sqr = self.radius * self.radius; // Radius squared
 
-        if a_sqr < self.radius * self.radius {
+        if a_sqr <= self.radius * self.radius {
             // the ray is inside the sphere
 
             let b = (r_sqr - a_sqr).sqrt();
-            let vod_prime_len = vod_len - b; // the distance between o and the intersection with the sphere
+            // the distance between o and the intersection with the sphere
+
+            let vod_prime_len = if vod_len - b < 0.0 {
+                vod_len + b
+            }
+            else {
+                vod_len - b
+            };
 
             return Intersection::Distance(vod_prime_len);
         } else {

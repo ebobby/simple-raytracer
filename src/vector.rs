@@ -1,6 +1,6 @@
-use std::ops::{Add, Sub};
+use std::ops::{Add, Mul, Sub};
 
-#[derive(Copy, Clone, Debug)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub struct Vector3 {
     pub x: f64,
     pub y: f64,
@@ -58,6 +58,18 @@ impl Sub for Vector3 {
             x: self.x - rhs.x,
             y: self.y - rhs.y,
             z: self.z - rhs.z,
+        }
+    }
+}
+
+impl Mul<f64> for Vector3 {
+    type Output = Self;
+
+    fn mul(self, factor: f64) -> Vector3 {
+        Vector3 {
+            x: self.x * factor,
+            y: self.y * factor,
+            z: self.z * factor,
         }
     }
 }
