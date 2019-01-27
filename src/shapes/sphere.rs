@@ -1,4 +1,5 @@
 use super::Intersectable;
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::vector::Vector3;
 
@@ -6,7 +7,7 @@ use crate::vector::Vector3;
 pub struct Sphere {
     pub position: Vector3,
     pub radius: f64,
-    pub color: [u8; 3],
+    pub material: Material,
 }
 
 impl Intersectable for Sphere {
@@ -30,12 +31,10 @@ impl Intersectable for Sphere {
 
             if distance > 0.0 {
                 Option::Some(distance)
-            }
-            else {
+            } else {
                 Option::None
             }
-        }
-        else {
+        } else {
             Option::None
         }
     }

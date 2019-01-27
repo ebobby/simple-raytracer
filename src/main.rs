@@ -1,18 +1,21 @@
 mod camera;
 mod light;
+mod material;
 mod ray;
 mod shapes;
 mod vector;
 
 use camera::Camera;
 use light::Light;
+use material::Color;
+use material::Material;
 use ray::Ray;
 use shapes::plane::Plane;
 use shapes::sphere::Sphere;
 use shapes::Shapes;
 use vector::Vector3;
 
-fn render(c: &Camera, shapes: &Vec<Shapes>, light: &Light) {
+fn render(c: &Camera, shapes: &Vec<Shapes>, light: &Light, bg_color: Color) {
     let mut imgbuf = image::ImageBuffer::new(c.sensor_width, c.sensor_height);
 
     let aspect_ratio_adjustment = c.sensor_width as f64 / c.sensor_height as f64;
@@ -44,21 +47,18 @@ fn render(c: &Camera, shapes: &Vec<Shapes>, light: &Light) {
                     },
                     direction: light_dir,
                 };
-                let col = int.color.clone();
+
+                let mat = int.material;
 
                 match Ray::cast_ray(&light_ray, shapes) {
-                    Option::None => [
-                        (col[0] as f64 * cos_angle) as u8,
-                        (col[1] as f64 * cos_angle) as u8,
-                        (col[2] as f64 * cos_angle) as u8,
-                    ],
-                    Option::Some(_) => [0x0, 0x0, 0x0],
+                    Option::None => mat.diffuse_color * cos_angle,
+                    Option::Some(_) => bg_color,
                 }
             }
-            Option::None => [0x0, 0x0, 0x0],
+            Option::None => bg_color,
         };
 
-        *pixel = image::Rgb(color);
+        *pixel = color.to_rgb();
     }
 
     imgbuf.save("result.png").unwrap();
@@ -76,27 +76,37 @@ fn main() {
         Shapes::Sphere(Sphere {
             position: Vector3::new(0.0, 0.0, -10.0),
             radius: 3.0,
-            color: [0x87, 0x1f, 0x78],
+            material: Material {
+                diffuse_color: Color::from_rgb(0x87, 0x1f, 0x78),
+            },
         }),
         Shapes::Sphere(Sphere {
             position: Vector3::new(-2.0, 0.0, -6.0),
             radius: 1.5,
-            color: [0xda, 0xa5, 0x20],
+            material: Material {
+                diffuse_color: Color::from_rgb(0xda, 0xa5, 0x20),
+            },
         }),
         Shapes::Sphere(Sphere {
             position: Vector3::new(0.0, 0.0, -3.0),
             radius: 1.0,
-            color: [0x2f, 0x8d, 0xff],
+            material: Material {
+                diffuse_color: Color::from_rgb(0x2f, 0x8d, 0xff),
+            },
         }),
         Shapes::Sphere(Sphere {
             position: Vector3::new(4.0, 5.0, -13.0),
             radius: 1.25,
-            color: [0xff, 0x2f, 0x2f],
+            material: Material {
+                diffuse_color: Color::from_rgb(0xff, 0x2f, 0x2f),
+            },
         }),
         Shapes::Plane(Plane {
             position: Vector3::new(0.0, -10.0, -5.0),
             normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
-            color: [0x98, 0xfb, 0x98],
+            material: Material {
+                diffuse_color: Color::from_rgb(0x98, 0xfb, 0x98),
+            },
         }),
     ];
 
@@ -104,5 +114,7 @@ fn main() {
         position: Vector3::new(-2.0, 50.0, 50.0),
     };
 
-    render(&camera, &shapes, &light);
+    let background_color = Color::new(0.0, 0.0, 0.0);
+
+    render(&camera, &shapes, &light, background_color);
 }

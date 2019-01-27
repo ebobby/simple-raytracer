@@ -1,3 +1,5 @@
+use super::material::Color;
+use super::material::Material;
 use super::shapes::Shapes;
 use super::vector::Vector3;
 
@@ -12,13 +14,15 @@ pub struct Intersection {
     pub distance: f64,
     pub hit_point: Vector3,
     pub normal: Vector3,
-    pub color: [u8; 3],
+    pub material: Material,
 }
 
 impl Ray {
     pub fn cast_ray(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection> {
         let mut distance = std::f64::INFINITY;
-        let mut color = [0x0, 0x0, 0x0];
+        let mut material = Material {
+            diffuse_color: Color::new(0.0, 0.0, 0.0),
+        };
         let mut normal = Vector3::zero();
         let mut hit = Vector3::zero();
 
@@ -27,7 +31,7 @@ impl Ray {
                 Option::Some(dist) => {
                     if dist < distance {
                         distance = dist;
-                        color = shape.color();
+                        material = shape.material();
 
                         hit = ray.origin + (ray.direction * distance);
                         normal = shape.normal(hit);
@@ -42,7 +46,7 @@ impl Ray {
                 distance: distance,
                 hit_point: hit,
                 normal: normal,
-                color: color
+                material: material,
             })
         } else {
             Option::None

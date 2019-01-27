@@ -1,3 +1,4 @@
+use crate::material::Material;
 use crate::ray::Ray;
 use crate::vector::Vector3;
 
@@ -7,7 +8,7 @@ use super::Intersectable;
 pub struct Plane {
     pub position: Vector3,
     pub normal: Vector3,
-    pub color: [u8; 3],
+    pub material: Material,
 }
 
 impl Intersectable for Plane {
@@ -21,8 +22,7 @@ impl Intersectable for Plane {
 
             if distance >= 0.0 {
                 return Option::Some(distance);
-            }
-            else {
+            } else {
                 return Option::None;
             }
         } else {
