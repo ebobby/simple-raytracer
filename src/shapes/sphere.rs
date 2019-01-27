@@ -1,4 +1,4 @@
-use super::Intersection;
+use super::Intersectable;
 use crate::ray::Ray;
 use crate::vector::Vector3;
 
@@ -8,8 +8,8 @@ pub struct Sphere {
     pub color: [u8; 3],
 }
 
-impl Sphere {
-    pub fn intersect(&self, ray: &Ray) -> Intersection {
+impl Intersectable for Sphere {
+    fn intersect(&self, ray: &Ray) -> Option<f64> {
         let voc = self.position - ray.origin; // Vector from the origin to the sphere center
         let voc_len_sqr = voc.dot(&voc); // The length squared of voc
         let vod_len = voc.dot(&ray.direction); // The length of the projected vector voc into the ray direction
@@ -21,15 +21,19 @@ impl Sphere {
         if a_sqr <= self.radius * self.radius {
             let b = (r_sqr - a_sqr).sqrt(); // the distance between o and the intersection with the sphere
 
-            let vod_prime_len = if vod_len - b < 0.0 {
+            let distance = if vod_len - b < 0.0 {
                 vod_len + b
             } else {
                 vod_len - b
             };
 
-            return Intersection::Distance(vod_prime_len);
+            return Option::Some(distance);
         } else {
-            return Intersection::None;
+            return Option::None;
         }
+    }
+
+    fn normal(&self, point: Vector3) -> Vector3 {
+        (point - self.position).normalize()
     }
 }

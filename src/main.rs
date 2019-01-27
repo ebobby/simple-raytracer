@@ -7,11 +7,12 @@ mod vector;
 use camera::Camera;
 use light::Light;
 use ray::Ray;
+use shapes::plane::Plane;
 use shapes::sphere::Sphere;
-use shapes::Intersection;
+use shapes::Shapes;
 use vector::Vector3;
 
-fn render(c: &Camera, spheres: &Vec<Sphere>, light: &Light) {
+fn render(c: &Camera, shapes: &Vec<Shapes>, light: &Light) {
     let mut imgbuf = image::ImageBuffer::new(c.sensor_width, c.sensor_height);
 
     let aspect_ratio_adjustment = c.sensor_width as f64 / c.sensor_height as f64;
@@ -35,18 +36,18 @@ fn render(c: &Camera, spheres: &Vec<Sphere>, light: &Light) {
         let mut normal = Vector3::zero();
         let mut hit = Vector3::zero();
 
-        for s in spheres {
-            match s.intersect(&ray) {
-                Intersection::None => (),
-                Intersection::Distance(dist) => {
+        for shape in shapes {
+            match shape.intersect(&ray) {
+                Option::Some(dist) => {
                     if dist < distance {
                         distance = dist;
-                        color = s.color.clone();
+                        color = shape.color();
 
                         hit = ray.origin + (ray.direction * distance);
-                        normal = (hit - s.position).normalize();
+                        normal = shape.normal(hit);
                     }
                 }
+                Option::None => (),
             }
         }
 
@@ -75,27 +76,32 @@ fn main() {
         field_of_view: std::f64::consts::PI / 3.0,
     };
 
-    let spheres = vec![
-        Sphere {
+    let shapes: Vec<Shapes> = vec![
+        Shapes::Sphere(Sphere {
             position: Vector3::new(0.0, 0.0, -10.0),
             radius: 3.0,
             color: [0x87, 0x1f, 0x78],
-        },
-        Sphere {
+        }),
+        Shapes::Sphere(Sphere {
             position: Vector3::new(-2.0, 0.0, -6.0),
             radius: 1.5,
             color: [0xda, 0xa5, 0x20],
-        },
-        Sphere {
+        }),
+        Shapes::Sphere(Sphere {
             position: Vector3::new(0.0, 0.0, -3.0),
             radius: 0.5,
             color: [0x2f, 0x8d, 0xff],
-        },
+        }),
+        Shapes::Plane(Plane {
+            position: Vector3::new(0.0, -10.0, -5.0),
+            normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
+            color: [0x98, 0xfb, 0x98],
+        }),
     ];
 
     let light = Light {
         position: Vector3::new(0.0, 5.0, 0.0),
     };
 
-    render(&camera, &spheres, &light);
+    render(&camera, &shapes, &light);
 }
