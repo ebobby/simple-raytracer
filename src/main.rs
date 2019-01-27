@@ -79,21 +79,21 @@ fn main() {
         Sphere {
             position: Vector3::new(0.0, 0.0, -10.0),
             radius: 3.0,
-            color: [0x99, 0x0, 0x99],
+            color: [0x87, 0x1f, 0x78],
         },
         Sphere {
             position: Vector3::new(-2.0, 0.0, -6.0),
             radius: 1.5,
-            color: [0xff, 0xd7, 0x0],
+            color: [0xda, 0xa5, 0x20],
         },
         Sphere {
             position: Vector3::new(0.0, 0.0, -3.0),
             radius: 0.5,
-            color: [0x0, 0x99, 0],
+            color: [0x2f, 0x8d, 0xff],
         },
     ];
 
-    let light =      Light {
+    let light = Light {
         position: Vector3::new(0.0, 5.0, 0.0),
     };
 
