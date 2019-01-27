@@ -3,6 +3,7 @@ use crate::vector::Vector3;
 
 use super::Intersectable;
 
+#[derive(Debug)]
 pub struct Plane {
     pub position: Vector3,
     pub normal: Vector3,

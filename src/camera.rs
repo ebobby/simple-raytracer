@@ -1,5 +1,6 @@
 use super::vector::Vector3;
 
+#[derive(Debug)]
 pub struct Camera {
     pub origin: Vector3,
     pub sensor_width: u32,

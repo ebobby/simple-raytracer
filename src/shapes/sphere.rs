@@ -2,6 +2,7 @@ use super::Intersectable;
 use crate::ray::Ray;
 use crate::vector::Vector3;
 
+#[derive(Debug)]
 pub struct Sphere {
     pub position: Vector3,
     pub radius: f64,

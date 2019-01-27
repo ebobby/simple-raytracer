@@ -9,6 +9,7 @@ pub trait Intersectable {
     fn normal(&self, hit_point: Vector3) -> Vector3;
 }
 
+#[derive(Debug)]
 pub enum Shapes {
     Sphere(sphere::Sphere),
     Plane(plane::Plane),
