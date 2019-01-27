@@ -27,9 +27,15 @@ impl Intersectable for Sphere {
                 vod_len - b
             };
 
-            return Option::Some(distance);
-        } else {
-            return Option::None;
+            if distance > 0.0 {
+                Option::Some(distance)
+            }
+            else {
+                Option::None
+            }
+        }
+        else {
+            Option::None
         }
     }
 
