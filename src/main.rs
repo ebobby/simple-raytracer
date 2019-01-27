@@ -1,13 +1,14 @@
 mod camera;
 mod light;
 mod ray;
-mod sphere;
+mod shapes;
 mod vector;
 
 use camera::Camera;
 use light::Light;
 use ray::Ray;
-use sphere::{Intersection, Sphere};
+use shapes::sphere::Sphere;
+use shapes::Intersection;
 use vector::Vector3;
 
 fn render(c: &Camera, spheres: &Vec<Sphere>, light: &Light) {
