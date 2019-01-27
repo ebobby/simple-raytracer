@@ -1,3 +1,4 @@
+use super::ray::Ray;
 use super::vector::Vector3;
 
 pub enum Intersection {
@@ -12,10 +13,10 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn intersect(&self, o: Vector3, dir: Vector3) -> Intersection {
-        let voc = self.position - o; // Vector from the origin to the sphere center
+    pub fn intersect(&self, ray: &Ray) -> Intersection {
+        let voc = self.position - ray.origin; // Vector from the origin to the sphere center
         let voc_len_sqr = voc.dot(&voc); // The length squared of voc
-        let vod_len = voc.dot(&dir); // The length of the projected vector voc into the ray direction
+        let vod_len = voc.dot(&ray.direction); // The length of the projected vector voc into the ray direction
 
         let a_sqr = voc_len_sqr - (vod_len * vod_len); // The length squared of the line between c and the ray
         let r_sqr = self.radius * self.radius; // Radius squared

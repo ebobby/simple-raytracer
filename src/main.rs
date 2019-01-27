@@ -1,8 +1,10 @@
 mod camera;
+mod ray;
 mod sphere;
 mod vector;
 
 use camera::Camera;
+use ray::Ray;
 use sphere::{Intersection, Sphere};
 use vector::Vector3;
 
@@ -19,14 +21,17 @@ fn render(c: &Camera, spheres: &Vec<Sphere>) {
             * aspect_ratio_adjustment;
         let j = (1.0 - (((y as f64 + 0.5) / c.sensor_height as f64) * 2.0)) * fov_adjustment;
 
-        let ray = Vector3::new(i, j, -1.0).normalize();
+        let ray = Ray {
+            origin: c.origin,
+            direction: Vector3::new(i, j, -1.0).normalize(),
+        };
 
         // casting ray
-        let mut color = image::Rgb([0x11, 0x33, 0x66]);
+        let mut color = image::Rgb([0x0, 0x0, 0x0]);
         let mut distance = std::f64::INFINITY;
 
         for s in spheres {
-            match s.intersect(c.origin, ray) {
+            match s.intersect(&ray) {
                 Intersection::None => (),
                 Intersection::Distance(dist) => {
                     if dist < distance {
@@ -55,7 +60,7 @@ fn main() {
         Sphere {
             position: Vector3::new(0.0, 0.0, -10.0),
             radius: 3.0,
-            color: [0x99, 0x0, 0x0],
+            color: [0x99, 0x0, 0x99],
         },
         Sphere {
             position: Vector3::new(0.0, 0.0, -5.0),
