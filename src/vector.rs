@@ -39,25 +39,25 @@ impl Vector3 {
 }
 
 impl Add for Vector3 {
-    type Output = Vector3;
+    type Output = Self;
 
-    fn add(self, other: Vector3) -> Vector3 {
+    fn add(self, rhs: Vector3) -> Vector3 {
         Vector3 {
-            x: self.x + other.x,
-            y: self.y + other.y,
-            z: self.z + other.z,
+            x: self.x + rhs.x,
+            y: self.y + rhs.y,
+            z: self.z + rhs.z,
         }
     }
 }
 
 impl Sub for Vector3 {
-    type Output = Vector3;
+    type Output = Self;
 
-    fn sub(self, other: Vector3) -> Vector3 {
+    fn sub(self, rhs: Vector3) -> Vector3 {
         Vector3 {
-            x: self.x - other.x,
-            y: self.y - other.y,
-            z: self.z - other.z,
+            x: self.x - rhs.x,
+            y: self.y - rhs.y,
+            z: self.z - rhs.z,
         }
     }
 }
