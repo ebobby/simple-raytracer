@@ -25,7 +25,7 @@ fn main() {
             sensor_height: 1080,
             field_of_view: std::f64::consts::PI / 3.0,
         },
-        shapes: vec![
+        objects: vec![
             Shapes::Sphere(Sphere {
                 position: Vector3::new(-3.0, -5.0, -16.0),
                 radius: 3.1,

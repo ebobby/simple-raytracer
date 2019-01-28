@@ -8,7 +8,7 @@ use super::vector::Vector3;
 #[derive(Debug)]
 pub struct Scene {
     pub camera: Camera,
-    pub shapes: Vec<Shapes>,
+    pub objects: Vec<Shapes>,
     pub lights: Vec<Light>,
     pub bg_color: Color,
 }
@@ -35,17 +35,8 @@ impl Scene {
             };
 
             // casting ray
-            let color = match Ray::cast_ray(&ray, &self.shapes) {
-                Option::Some(intersection) => {
-                    let light_int = Light::calculate_intensity(
-                        &self.shapes,
-                        &self.lights,
-                        &intersection,
-                        ray.direction,
-                    );
-
-                    intersection.material.diffuse_color * light_int
-                }
+            let color = match Ray::cast_ray(&ray, &self.objects, &self.lights) {
+                Option::Some(color) => color,
                 Option::None => self.bg_color,
             };
 

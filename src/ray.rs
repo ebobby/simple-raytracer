@@ -1,3 +1,4 @@
+use super::light::Light;
 use super::material::Color;
 use super::material::Material;
 use super::shapes::Shapes;
@@ -18,7 +19,7 @@ pub struct Intersection {
 }
 
 impl Ray {
-    pub fn intersect(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection>  {
+    pub fn intersect(ray: &Ray, objects: &Vec<Shapes>) -> Option<Intersection> {
         let mut distance = std::f64::INFINITY;
         let mut material = Material {
             diffuse_color: Color::new(0.0, 0.0, 0.0),
@@ -27,7 +28,7 @@ impl Ray {
         let mut normal = Vector3::zero();
         let mut hit = Vector3::zero();
 
-        for shape in shapes {
+        for shape in objects {
             match shape.intersect(&ray) {
                 Option::Some(dist) => {
                     if dist < distance {
@@ -54,7 +55,17 @@ impl Ray {
         }
     }
 
-    pub fn cast_ray(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection> {
-        Ray::intersect(ray, shapes)
+    pub fn cast_ray(ray: &Ray, objects: &Vec<Shapes>, lights: &Vec<Light>) -> Option<Color> {
+        match Ray::intersect(ray, objects) {
+            Option::Some(intersection) => {
+                let light_int =
+                    Light::calculate_intensity(objects, lights, &intersection, ray.direction);
+
+                let color = intersection.material.diffuse_color * light_int;
+
+                Option::Some(color)
+            }
+            Option::None => Option::None,
+        }
     }
 }
