@@ -58,11 +58,18 @@ fn main() {
                 },
             }),
         ],
-        lights: vec![Light {
-            position: Vector3::new(0.0, 5.0, -11.0),
-            intensity: 1.0,
-        }],
+        lights: vec![
+            Light {
+                position: Vector3::new(0.0, 50.0, -50.0),
+                intensity: 0.75,
+            },
+            Light {
+                position: Vector3::new(-40.0, 20.0, 20.0),
+                intensity: 0.75,
+            },
+        ],
         bg_color: Color::new(0.05, 0.05, 0.05),
+        ambient_light: 0.20,
     };
 
     scene.render("result.png".to_string());

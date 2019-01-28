@@ -11,6 +11,7 @@ pub struct Scene {
     pub shapes: Vec<Shapes>,
     pub lights: Vec<Light>,
     pub bg_color: Color,
+    pub ambient_light: f64,
 }
 
 impl Scene {
@@ -37,7 +38,7 @@ impl Scene {
             // casting ray
             let color = match Ray::cast_ray(&ray, &self.shapes) {
                 Option::Some(intersection) => {
-                    let mut diffuse_light_intensity = 0.0f64;
+                    let mut diffuse_light_intensity = self.ambient_light;
                     let mut specular_light_intensity = 1.0f64;
                     let mat = intersection.material;
 
