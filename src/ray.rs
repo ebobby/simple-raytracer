@@ -18,7 +18,7 @@ pub struct Intersection {
 }
 
 impl Ray {
-    pub fn cast_ray(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection> {
+    pub fn intersect(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection>  {
         let mut distance = std::f64::INFINITY;
         let mut material = Material {
             diffuse_color: Color::new(0.0, 0.0, 0.0),
@@ -52,5 +52,9 @@ impl Ray {
         } else {
             Option::None
         }
+    }
+
+    pub fn cast_ray(ray: &Ray, shapes: &Vec<Shapes>) -> Option<Intersection> {
+        Ray::intersect(ray, shapes)
     }
 }

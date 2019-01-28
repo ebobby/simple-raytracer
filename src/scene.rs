@@ -1,6 +1,5 @@
 use super::camera::Camera;
 use super::light::Light;
-use super::light::LightType;
 use super::material::Color;
 use super::ray::Ray;
 use super::shapes::Shapes;
@@ -38,47 +37,14 @@ impl Scene {
             // casting ray
             let color = match Ray::cast_ray(&ray, &self.shapes) {
                 Option::Some(intersection) => {
-                    let mut diffuse_light_intensity = 0.0;
-                    let mut specular_light_intensity = 1.0;
-                    let mat = intersection.material;
+                    let light_int = Light::calculate_intensity(
+                        &self.shapes,
+                        &self.lights,
+                        &intersection,
+                        ray.direction,
+                    );
 
-                    for light in &self.lights {
-                        // Calculate light direction and angle
-                        match light.light_type {
-                            LightType::Ambient => diffuse_light_intensity += light.intensity,
-                            LightType::Point => {
-                                let light_dir =
-                                    (light.position - intersection.hit_point).normalize();
-                                let cos_angle = light_dir.dot(&intersection.normal).max(0.0);
-
-                                let light_ray = Ray {
-                                    origin: if light_dir.dot(&intersection.normal) < 0.0 {
-                                        intersection.hit_point - (intersection.normal * 1e-2)
-                                    } else {
-                                        intersection.hit_point + (intersection.normal * 1e-2)
-                                    },
-                                    direction: light_dir,
-                                };
-
-                                match Ray::cast_ray(&light_ray, &self.shapes) {
-                                    Option::None => {
-                                        diffuse_light_intensity += light.intensity * cos_angle;
-
-                                        if intersection.normal.dot(&light_dir) > 0.0 {
-                                            specular_light_intensity += (light_dir
-                                                .reflect(&intersection.normal)
-                                                .dot(&ray.direction))
-                                            .max(0.0)
-                                            .powf(mat.specular_exponent);
-                                        }
-                                    }
-                                    Option::Some(_) => (),
-                                }
-                            }
-                        }
-                    }
-
-                    mat.diffuse_color * diffuse_light_intensity * specular_light_intensity
+                    intersection.material.diffuse_color * light_int
                 }
                 Option::None => self.bg_color,
             };
