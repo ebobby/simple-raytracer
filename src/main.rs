@@ -74,7 +74,7 @@ fn main() {
 
     let scene = Scene {
         camera: Camera {
-            origin: Vector3::new(0.0, 0.0, 5.0),
+            origin: Vector3::new(0.0, 0.0, 0.0),
             sensor_width: 1920,
             sensor_height: 1080,
             field_of_view: std::f64::consts::PI / 3.0,
@@ -109,28 +109,28 @@ fn main() {
                 },
             }),
             Shapes::Plane(Plane {
-                position: Vector3::new(0.0, -10.0, -5.0),
+                position: Vector3::new(0.0, -5.0, 0.0),
                 normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
                 material: Material {
-                    diffuse_color: Color::from_rgb(0x98, 0xfb, 0x98),
+                    diffuse_color: Color::from_rgb(0x78, 0xbb, 0x78),
                 },
             }),
         ],
         lights: vec![
             Light {
                 position: Vector3::new(-20.0, 20.0, 20.0),
-                intensity: 0.5,
+                intensity: 0.3,
             },
             Light {
                 position: Vector3::new(30.0, 50.0, -25.0),
-                intensity: 0.8,
+                intensity: 0.6,
             },
             Light {
                 position: Vector3::new(30.0, 20.0, 30.0),
-                intensity: 0.9,
+                intensity: 0.6,
             },
         ],
-        bg_color: Color::new(0.0, 0.0, 0.0),
+        bg_color: Color::new(0.05, 0.05, 0.05),
     };
 
     scene.render("result.png".to_string());

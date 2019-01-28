@@ -23,10 +23,10 @@ impl Scene {
 
         // Iterate over the coordinates and pixels of the image
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
-            let i = ((((x as f64 + 0.5) / self.camera.sensor_width as f64) * 2.0) - 1.0)
+            let i = ((((x as f64 + 0.5) / (self.camera.sensor_width - 1) as f64) * 2.0) - 1.0)
                 * fov_adjustment
                 * aspect_ratio_adjustment;
-            let j = (1.0 - (((y as f64 + 0.5) / self.camera.sensor_height as f64) * 2.0))
+            let j = (1.0 - (((y as f64 + 0.5) / (self.camera.sensor_height - 1) as f64) * 2.0))
                 * fov_adjustment;
 
             let ray = Ray {
@@ -61,7 +61,7 @@ impl Scene {
 
                     let mat = intersection.material;
 
-                     mat.diffuse_color * diffuse_light_intensity
+                    mat.diffuse_color * diffuse_light_intensity
                 }
                 Option::None => self.bg_color,
             };
