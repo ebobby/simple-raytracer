@@ -11,6 +11,7 @@ pub struct Color {
 #[derive(Clone, Copy, Debug)]
 pub struct Material {
     pub diffuse_color: Color,
+    pub specular_exponent: f64,
 }
 
 impl Color {

@@ -36,6 +36,10 @@ impl Vector3 {
             z: self.z * inv_len,
         }
     }
+
+    pub fn reflect(&self, other: &Vector3) -> Vector3 {
+        *self - *other * other.dot(self) * 2.0
+    }
 }
 
 impl Add for Vector3 {

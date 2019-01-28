@@ -38,11 +38,13 @@ impl Scene {
             let color = match Ray::cast_ray(&ray, &self.shapes) {
                 Option::Some(intersection) => {
                     let mut diffuse_light_intensity = 0.0f64;
+                    let mut specular_light_intensity = 1.0f64;
+                    let mat = intersection.material;
 
                     for light in &self.lights {
                         // Calculate light direction and angle
                         let light_dir = (light.position - intersection.hit_point).normalize();
-                        let cos_angle = 0.0f64.max(light_dir.dot(&intersection.normal));
+                        let cos_angle = light_dir.dot(&intersection.normal).max(0.0);
 
                         let light_ray = Ray {
                             origin: if light_dir.dot(&intersection.normal) < 0.0 {
@@ -54,14 +56,22 @@ impl Scene {
                         };
 
                         match Ray::cast_ray(&light_ray, &self.shapes) {
-                            Option::None => diffuse_light_intensity += light.intensity * cos_angle,
+                            Option::None => {
+                                diffuse_light_intensity += light.intensity * cos_angle;
+
+                                if intersection.normal.dot(&light_dir) > 0.0 {
+                                    specular_light_intensity += (light_dir
+                                        .reflect(&intersection.normal)
+                                        .dot(&ray.direction))
+                                    .max(0.0)
+                                    .powf(mat.specular_exponent);
+                                }
+                            }
                             Option::Some(_) => (),
                         }
                     }
 
-                    let mat = intersection.material;
-
-                    mat.diffuse_color * diffuse_light_intensity
+                    mat.diffuse_color * diffuse_light_intensity * specular_light_intensity
                 }
                 Option::None => self.bg_color,
             };

@@ -22,6 +22,7 @@ impl Ray {
         let mut distance = std::f64::INFINITY;
         let mut material = Material {
             diffuse_color: Color::new(0.0, 0.0, 0.0),
+            specular_exponent: 0.0,
         };
         let mut normal = Vector3::zero();
         let mut hit = Vector3::zero();
