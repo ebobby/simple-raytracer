@@ -1,7 +1,7 @@
 extern crate image;
 
 use super::vector::Vector3;
-use std::ops::Mul;
+use std::ops::{Add, Mul};
 
 #[derive(Clone, Copy, Debug)]
 pub struct Color {
@@ -12,6 +12,17 @@ pub struct Color {
 pub struct Material {
     pub diffuse_color: Color,
     pub specular_exponent: f64,
+    pub reflectiveness: f64,
+}
+
+impl Material {
+    pub fn neutral() -> Material {
+        Material {
+            diffuse_color: Color::new(0.0, 0.0, 0.0),
+            specular_exponent: 0.0,
+            reflectiveness: 0.0,
+        }
+    }
 }
 
 impl Color {
@@ -44,6 +55,18 @@ impl Mul<f64> for Color {
             self.color.x * factor,
             self.color.y * factor,
             self.color.z * factor,
+        )
+    }
+}
+
+impl Add for Color {
+    type Output = Self;
+
+    fn add(self, rhs: Color) -> Color {
+        Color::new(
+            self.color.x + rhs.color.x,
+            self.color.y + rhs.color.y,
+            self.color.z + rhs.color.z,
         )
     }
 }

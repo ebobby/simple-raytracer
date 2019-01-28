@@ -35,7 +35,7 @@ impl Scene {
             };
 
             // casting ray
-            let color = match Ray::cast_ray(&ray, &self.objects, &self.lights) {
+            let color = match Ray::cast_ray(&ray, &self.objects, &self.lights, 0) {
                 Option::Some(color) => color,
                 Option::None => self.bg_color,
             };

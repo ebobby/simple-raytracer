@@ -20,7 +20,7 @@ use vector::Vector3;
 fn main() {
     let scene = Scene {
         camera: Camera {
-            origin: Vector3::new(0.0, 0.0, 5.0),
+            origin: Vector3::new(0.0, 0.0, 10.0),
             sensor_width: 1920,
             sensor_height: 1080,
             field_of_view: std::f64::consts::PI / 3.0,
@@ -32,6 +32,7 @@ fn main() {
                 material: Material {
                     diffuse_color: Color::from_rgb(0xbb, 0x77, 0x77),
                     specular_exponent: 4.0,
+                    reflectiveness: 0.0,
                 },
             }),
             Shapes::Sphere(Sphere {
@@ -40,6 +41,7 @@ fn main() {
                 material: Material {
                     diffuse_color: Color::from_rgb(0x77, 0xbb, 0x77),
                     specular_exponent: 500.0,
+                    reflectiveness: 0.0,
                 },
             }),
             Shapes::Sphere(Sphere {
@@ -48,14 +50,25 @@ fn main() {
                 material: Material {
                     diffuse_color: Color::from_rgb(0x2f, 0x8d, 0xff),
                     specular_exponent: 20.0,
+                    reflectiveness: 0.0,
+                },
+            }),
+            Shapes::Sphere(Sphere {
+                position: Vector3::new(5.0, 4.0, -20.0),
+                radius: 5.0,
+                material: Material {
+                    diffuse_color: Color::new(0.1, 0.1, 0.1),
+                    specular_exponent: 100.0,
+                    reflectiveness: 1.0,
                 },
             }),
             Shapes::Plane(Plane {
-                position: Vector3::new(0.0, -8.0, 0.0),
+                position: Vector3::new(0.0, -9.0, 0.0),
                 normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
                 material: Material {
-                    diffuse_color: Color::from_rgb(0xbb, 0xbb, 0xbb),
+                    diffuse_color: Color::from_rgb(0x66, 0x33, 0x66),
                     specular_exponent: 5.0,
+                    reflectiveness: 0.6,
                 },
             }),
         ],
