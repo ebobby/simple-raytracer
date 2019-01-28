@@ -30,7 +30,7 @@ fn main() {
                 radius: 3.1,
                 material: Material {
                     diffuse_color: Color::from_rgb(0xbb, 0x77, 0x77),
-                    specular_exponent: 10.0,
+                    specular_exponent: 4.0,
                 },
             }),
             Shapes::Sphere(Sphere {
@@ -38,7 +38,7 @@ fn main() {
                 radius: 3.0,
                 material: Material {
                     diffuse_color: Color::from_rgb(0x77, 0xbb, 0x77),
-                    specular_exponent: 50.0,
+                    specular_exponent: 500.0,
                 },
             }),
             Shapes::Sphere(Sphere {
