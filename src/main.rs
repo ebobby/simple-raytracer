@@ -8,6 +8,7 @@ mod vector;
 
 use camera::Camera;
 use light::Light;
+use light::LightType;
 use material::Color;
 use material::Material;
 use scene::Scene;
@@ -62,14 +63,20 @@ fn main() {
             Light {
                 position: Vector3::new(0.0, 50.0, -50.0),
                 intensity: 0.75,
+                light_type: LightType::Point,
             },
             Light {
                 position: Vector3::new(-40.0, 20.0, 20.0),
                 intensity: 0.75,
+                light_type: LightType::Point,
+            },
+            Light {
+                position: Vector3::zero(),
+                intensity: 0.25,
+                light_type: LightType::Ambient,
             },
         ],
         bg_color: Color::new(0.05, 0.05, 0.05),
-        ambient_light: 0.20,
     };
 
     scene.render("result.png".to_string());
