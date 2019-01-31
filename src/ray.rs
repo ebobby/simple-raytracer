@@ -58,7 +58,7 @@ impl Ray {
         lights: &Vec<Light>,
         depth: u8,
     ) -> Option<Color> {
-        if depth >= 2 {
+        if depth >= 4 {
             return Option::None;
         }
 
