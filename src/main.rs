@@ -58,7 +58,16 @@ fn main() {
                 radius: 5.0,
                 material: Material {
                     diffuse_color: Color::new(0.1, 0.1, 0.1),
-                    specular_exponent: 100.0,
+                    specular_exponent: 50.0,
+                    reflectiveness: 1.0,
+                },
+            }),
+            Shapes::Sphere(Sphere {
+                position: Vector3::new(-10.0, 10.0, -25.0),
+                radius: 10.0,
+                material: Material {
+                    diffuse_color: Color::new(0.1, 0.1, 0.1),
+                    specular_exponent: 2.0,
                     reflectiveness: 1.0,
                 },
             }),
