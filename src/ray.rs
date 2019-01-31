@@ -64,10 +64,9 @@ impl Ray {
 
         match Ray::intersect(ray, objects) {
             Option::Some(intersection) => {
-                let light_int =
-                    Light::calculate_intensity(objects, lights, &intersection, ray.direction);
+                let mut shaded_color = Light::shade(objects, lights, &intersection, ray.direction);
 
-                let mut color = intersection.material.diffuse_color * light_int;
+                // intersection.material.diffuse_color * (light_int.0 + (light_int.1 * 1.0));
 
                 if intersection.material.reflectiveness > 0.0 {
                     let reflection = ray.direction.reflect(&intersection.normal).normalize();
@@ -79,13 +78,14 @@ impl Ray {
 
                     match Ray::cast_ray(&reflected_ray, objects, lights, depth + 1) {
                         Option::Some(reflected_color) => {
-                            color = color + reflected_color * intersection.material.reflectiveness;
-                        },
+                            shaded_color = shaded_color
+                                + reflected_color * intersection.material.reflectiveness;
+                        }
                         Option::None => (),
                     }
                 }
 
-                Option::Some(color)
+                Option::Some(shaded_color)
             }
             Option::None => Option::None,
         }

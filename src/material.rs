@@ -10,7 +10,9 @@ pub struct Color {
 
 #[derive(Clone, Copy, Debug)]
 pub struct Material {
-    pub diffuse_color: Color,
+    pub color: Color,
+    pub diffuse: f64,
+    pub specular: f64,
     pub specular_exponent: f64,
     pub reflectiveness: f64,
 }
@@ -18,7 +20,9 @@ pub struct Material {
 impl Material {
     pub fn neutral() -> Material {
         Material {
-            diffuse_color: Color::new(0.0, 0.0, 0.0),
+            color: Color::new(0.0, 0.0, 0.0),
+            diffuse: 0.0,
+            specular: 0.0,
             specular_exponent: 0.0,
             reflectiveness: 0.0,
         }

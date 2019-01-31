@@ -1,3 +1,4 @@
+use super::material::Color;
 use super::ray::Intersection;
 use super::ray::Ray;
 use super::shapes::Shapes;
@@ -17,19 +18,19 @@ pub enum LightType {
 }
 
 impl Light {
-    pub fn calculate_intensity(
+    pub fn shade(
         objects: &Vec<Shapes>,
         lights: &Vec<Light>,
         intersection: &Intersection,
         direction: Vector3,
-    ) -> f64 {
-        let mut diffuse_light_intensity = 0.0;
-        let mut specular_light_intensity = 1.0;
+    ) -> Color {
+        let mut light_amount = 0.0;
+        let mut specular_amount = 0.0;
         let mat = intersection.material;
 
         for light in lights {
             match light.light_type {
-                LightType::Ambient => diffuse_light_intensity += light.intensity,
+                LightType::Ambient => light_amount += light.intensity,
                 LightType::Point => {
                     let light_dir = (light.position - intersection.hit_point).normalize();
                     let cos_angle = light_dir.dot(&intersection.normal).max(0.0);
@@ -45,14 +46,12 @@ impl Light {
 
                     match Ray::intersect(&light_ray, objects) {
                         Option::None => {
-                            diffuse_light_intensity += light.intensity * cos_angle;
+                            light_amount += light.intensity * cos_angle;
 
-                            if intersection.normal.dot(&light_dir) > 0.0 {
-                                specular_light_intensity +=
-                                    (light_dir.reflect(&intersection.normal).dot(&direction))
-                                        .max(0.0)
-                                        .powf(mat.specular_exponent);
-                            }
+                            specular_amount +=
+                                (-(-light_dir).reflect(&intersection.normal).dot(&direction))
+                                    .max(0.0)
+                                    .powf(mat.specular_exponent);
                         }
                         Option::Some(_) => (),
                     }
@@ -60,6 +59,6 @@ impl Light {
             }
         }
 
-        diffuse_light_intensity * specular_light_intensity
+        mat.color * (light_amount * mat.diffuse + specular_amount * mat.specular)
     }
 }
