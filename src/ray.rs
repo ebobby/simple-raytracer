@@ -66,8 +66,6 @@ impl Ray {
             Option::Some(intersection) => {
                 let mut shaded_color = Light::shade(objects, lights, &intersection, ray.direction);
 
-                // intersection.material.diffuse_color * (light_int.0 + (light_int.1 * 1.0));
-
                 if intersection.material.reflectiveness > 0.0 {
                     let reflection = ray.direction.reflect(&intersection.normal).normalize();
 
