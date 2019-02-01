@@ -9,6 +9,7 @@ pub struct Light {
     pub light_type: LightType,
     pub position: Vector3,
     pub intensity: f64,
+    pub color: Color,
 }
 
 #[derive(Debug)]
@@ -24,13 +25,14 @@ impl Light {
         intersection: &Intersection,
         direction: Vector3,
     ) -> Color {
-        let mut light_amount = 0.0;
-        let mut specular_amount = 0.0;
         let mat = intersection.material;
+
+        let mut diffuse_light = Color::new(0.0, 0.0, 0.0);
+        let mut specular_light = Color::new(0.0, 0.0, 0.0);
 
         for light in lights {
             match light.light_type {
-                LightType::Ambient => light_amount += light.intensity,
+                LightType::Ambient => diffuse_light = diffuse_light + light.color * light.intensity,
                 LightType::Point => {
                     let light_dir = (light.position - intersection.hit_point).normalize();
                     let cos_angle = light_dir.dot(&intersection.normal).max(0.0);
@@ -46,12 +48,14 @@ impl Light {
 
                     match Ray::intersect(&light_ray, objects) {
                         Option::None => {
-                            light_amount += light.intensity * cos_angle;
+                            diffuse_light =
+                                diffuse_light + light.color * (light.intensity * cos_angle);
 
-                            specular_amount +=
-                                (-(-light_dir).reflect(&intersection.normal).dot(&direction))
-                                    .max(0.0)
-                                    .powf(mat.specular_exponent);
+                            specular_light = specular_light
+                                + light.color
+                                    * (-(-light_dir).reflect(&intersection.normal).dot(&direction))
+                                        .max(0.0)
+                                        .powf(mat.specular_exponent);
                         }
                         Option::Some(_) => (),
                     }
@@ -59,6 +63,6 @@ impl Light {
             }
         }
 
-        mat.color * (light_amount * mat.diffuse + specular_amount * mat.specular)
+        mat.color * ((diffuse_light * mat.diffuse) + (specular_light * mat.specular))
     }
 }

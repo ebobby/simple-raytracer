@@ -70,17 +70,6 @@ fn main() {
                     reflectiveness: 0.0,
                 },
             }),
-            Shapes::Plane(Plane {
-                position: Vector3::new(0.0, -8.0, 0.0),
-                normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
-                material: Material {
-                    color: Color::from_rgb(0x66, 0x33, 0x66),
-                    diffuse: 0.8,
-                    specular: 0.2,
-                    specular_exponent: 5.0,
-                    reflectiveness: 0.6,
-                },
-            }),
             Shapes::Sphere(Sphere {
                 position: Vector3::new(-10.0, 5.0, -20.0),
                 radius: 5.0,
@@ -92,27 +81,42 @@ fn main() {
                     reflectiveness: 1.0,
                 },
             }),
+            Shapes::Plane(Plane {
+                position: Vector3::new(0.0, -8.0, 0.0),
+                normal: Vector3::new(0.0, -1.0, 0.0).normalize(),
+                material: Material {
+                    color: Color::from_rgb(0x66, 0x33, 0x66),
+                    diffuse: 0.8,
+                    specular: 0.2,
+                    specular_exponent: 5.0,
+                    reflectiveness: 0.6,
+                },
+            }),
         ],
         lights: vec![
             Light {
                 position: Vector3::new(-40.0, 20.0, 20.0),
-                intensity: 0.8,
+                intensity: 1.0,
                 light_type: LightType::Point,
+                color: Color::new(1.0, 1.0, 1.0),
             },
             Light {
                 position: Vector3::new(40.0, 20.0, 20.0),
                 intensity: 0.8,
                 light_type: LightType::Point,
+                color: Color::new(0.66, 0.0, 0.66),
             },
             Light {
                 position: Vector3::new(00.0, 50.0, 0.0),
-                intensity: 1.0,
+                intensity: 0.8,
                 light_type: LightType::Point,
+                color: Color::from_rgb(0xa6, 0x7c, 0x00),
             },
             Light {
                 position: Vector3::zero(),
                 intensity: 0.25,
                 light_type: LightType::Ambient,
+                color: Color::new(1.0, 1.0, 1.0),
             },
         ],
         bg_color: Color::new(0.05, 0.05, 0.05),
