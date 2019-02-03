@@ -38,7 +38,11 @@ impl Color {
 
     pub fn from_rgb(r: u8, g: u8, b: u8) -> Color {
         Color {
-            color: Vector3::new(r as f64 / 255.0, g as f64 / 255.0, b as f64 / 255.0),
+            color: Vector3::new(
+                f64::from(r) / 255.0,
+                f64::from(g) / 255.0,
+                f64::from(b) / 255.0,
+            ),
         }
     }
 
