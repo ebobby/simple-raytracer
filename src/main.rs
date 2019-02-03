@@ -17,15 +17,19 @@ use shapes::sphere::Sphere;
 use shapes::Shapes;
 use vector::Vector3;
 
+use std::time::Instant;
+
 fn main() {
     let scene = Scene {
-        camera: Camera {
-            width: 1920,
-            height: 1080,
-            fov: 60,
-            origin: Vector3::new(0.0, -7.5, 0.0),
-            d: 1.0,
-        },
+        camera: Camera::new(
+            Vector3::new(0.0, -3.0, 20.0),
+            Vector3::new(0.0, 0.0, -20.0),
+            1.0,
+            60,
+            -40,
+            1920,
+            1080,
+        ),
         objects: vec![
             Shapes::Sphere(Sphere {
                 position: Vector3::new(-3.0, -5.0, -16.0),
@@ -123,5 +127,9 @@ fn main() {
         bg_color: Color::new(0.05, 0.05, 0.05),
     };
 
+    let now = Instant::now();
+
     scene.render("result.png".to_string());
+
+    println!("{} seconds elapsed.", now.elapsed().as_secs());
 }
