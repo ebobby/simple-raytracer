@@ -20,10 +20,11 @@ use vector::Vector3;
 fn main() {
     let scene = Scene {
         camera: Camera {
-            origin: Vector3::new(0.0, -2.0, 0.0),
-            sensor_width: 1920,
-            sensor_height: 1080,
-            field_of_view: std::f64::consts::PI / 3.0,
+            width: 1920,
+            height: 1080,
+            fov: 60,
+            origin: Vector3::new(0.0, -7.5, 0.0),
+            d: 1.0,
         },
         objects: vec![
             Shapes::Sphere(Sphere {

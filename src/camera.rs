@@ -2,8 +2,10 @@ use super::vector::Vector3;
 
 #[derive(Debug)]
 pub struct Camera {
+    pub width: u32,
+    pub height: u32,
+    pub fov: u16,
+
     pub origin: Vector3,
-    pub sensor_width: u32,
-    pub sensor_height: u32,
-    pub field_of_view: f64,
+    pub d: f64,
 }
