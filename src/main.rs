@@ -93,5 +93,7 @@ fn main() {
 
     scene.render("result.png".to_string());
 
-    println!("{} seconds elapsed.", now.elapsed().as_secs());
+    let duration = now.elapsed();
+
+    println!("{} milliseconds elapsed.", duration.as_secs() * 1000 + duration.subsec_millis() as u64);
 }
