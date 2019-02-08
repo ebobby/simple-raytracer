@@ -69,7 +69,7 @@ impl Ray {
                     let reflection = ray.direction.reflect(&intersection.normal).normalize();
 
                     let reflected_ray = Ray::new(
-                        intersection.hit_point + (intersection.normal * 1.001),
+                        intersection.hit_point.correct(&intersection.normal),
                         reflection,
                     );
 

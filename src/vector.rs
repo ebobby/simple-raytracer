@@ -48,6 +48,12 @@ impl Vector3 {
     pub fn reflect(&self, other: &Vector3) -> Vector3 {
         *self - *other * other.dot(self) * 2.0
     }
+
+    /// Due to numerical precision sometimes we need to nudge vectors
+    /// a little bit into a given direction.
+    pub fn correct(&self, other: &Vector3) -> Vector3 {
+        *self + (*other * 1e-6)
+    }
 }
 
 impl Add for Vector3 {

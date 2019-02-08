@@ -48,9 +48,9 @@ impl Light {
 
                     let light_ray = Ray {
                         origin: if light_dir.dot(&intersection.normal) < 0.0 {
-                            intersection.hit_point - (intersection.normal * 1e-2)
+                            intersection.hit_point.correct(&-intersection.normal)
                         } else {
-                            intersection.hit_point + (intersection.normal * 1e-2)
+                            intersection.hit_point.correct(&intersection.normal)
                         },
                         direction: light_dir,
                     };
