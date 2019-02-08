@@ -57,7 +57,7 @@ impl Ray {
     }
 
     pub fn cast_ray(ray: &Ray, objects: &[Shapes], lights: &[Light], depth: u8) -> Option<Color> {
-        if depth >= 4 {
+        if depth >= crate::OPTIONS.max_rays {
             return Option::None;
         }
 

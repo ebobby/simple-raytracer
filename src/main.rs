@@ -1,6 +1,7 @@
 mod camera;
 mod light;
 mod material;
+mod options;
 mod ray;
 mod scene;
 mod shapes;
@@ -11,11 +12,17 @@ use light::Light;
 use light::LightType;
 use material::Color;
 use material::Material;
+use options::Options;
 use scene::Scene;
 use shapes::Shapes;
 use vector::Vector3;
 
 use std::time::Instant;
+
+const OPTIONS: Options = Options {
+    bias: 1e-6,
+    max_rays: 4,
+};
 
 fn main() {
     let scene = Scene {
