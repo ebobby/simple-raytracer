@@ -1,12 +1,8 @@
 extern crate image;
 
 use super::vector::Vector3;
-use std::ops::{Add, Mul};
 
-#[derive(Clone, Copy, Debug)]
-pub struct Color {
-    pub color: Vector3,
-}
+pub type Color = Vector3;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Material {
@@ -18,75 +14,41 @@ pub struct Material {
 }
 
 impl Material {
-    pub fn neutral() -> Material {
+    pub fn new(
+        color: Color,
+        diffuse: f64,
+        specular: f64,
+        specular_exponent: f64,
+        reflectiveness: f64,
+    ) -> Material {
         Material {
-            color: Color::new(0.0, 0.0, 0.0),
-            diffuse: 0.0,
-            specular: 0.0,
-            specular_exponent: 0.0,
-            reflectiveness: 0.0,
+            color,
+            diffuse,
+            specular,
+            specular_exponent,
+            reflectiveness,
         }
+    }
+
+    pub fn neutral() -> Material {
+        Material::new(Color::new(0.0, 0.0, 0.0), 0.0, 0.0, 0.0, 0.0)
     }
 }
 
 impl Color {
-    pub fn new(r: f64, g: f64, b: f64) -> Color {
-        Color {
-            color: Vector3::new(r, g, b),
-        }
-    }
-
     pub fn from_rgb(r: u8, g: u8, b: u8) -> Color {
-        Color {
-            color: Vector3::new(
-                f64::from(r) / 255.0,
-                f64::from(g) / 255.0,
-                f64::from(b) / 255.0,
-            ),
-        }
+        Color::new(
+            f64::from(r) / 255.0,
+            f64::from(g) / 255.0,
+            f64::from(b) / 255.0,
+        )
     }
 
     pub fn to_rgb(&self) -> image::Rgb<u8> {
         image::Rgb([
-            (self.color.x.min(1.0).max(0.0) * 255.0) as u8,
-            (self.color.y.min(1.0).max(0.0) * 255.0) as u8,
-            (self.color.z.min(1.0).max(0.0) * 255.0) as u8,
+            (self.x.min(1.0).max(0.0) * 255.0) as u8,
+            (self.y.min(1.0).max(0.0) * 255.0) as u8,
+            (self.z.min(1.0).max(0.0) * 255.0) as u8,
         ])
-    }
-}
-
-impl Mul<f64> for Color {
-    type Output = Self;
-
-    fn mul(self, factor: f64) -> Color {
-        Color::new(
-            self.color.x * factor,
-            self.color.y * factor,
-            self.color.z * factor,
-        )
-    }
-}
-
-impl Mul for Color {
-    type Output = Self;
-
-    fn mul(self, other: Color) -> Color {
-        Color::new(
-            self.color.x * other.color.x,
-            self.color.y * other.color.y,
-            self.color.z * other.color.z,
-        )
-    }
-}
-
-impl Add for Color {
-    type Output = Self;
-
-    fn add(self, rhs: Color) -> Color {
-        Color::new(
-            self.color.x + rhs.color.x,
-            self.color.y + rhs.color.y,
-            self.color.z + rhs.color.z,
-        )
     }
 }

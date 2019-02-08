@@ -17,6 +17,22 @@ pub enum Shapes {
 }
 
 impl Shapes {
+    pub fn sphere(position: Vector3, radius: f64, material: Material) -> Shapes {
+        Shapes::Sphere(sphere::Sphere {
+            position,
+            radius,
+            material,
+        })
+    }
+
+    pub fn plane(position: Vector3, normal: Vector3, material: Material) -> Shapes {
+        Shapes::Plane(plane::Plane {
+            position,
+            normal,
+            material,
+        })
+    }
+
     pub fn intersect(&self, ray: &Ray) -> Option<f64> {
         match self {
             Shapes::Sphere(s) => s.intersect(ray),

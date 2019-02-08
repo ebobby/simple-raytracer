@@ -19,11 +19,15 @@ pub struct Intersection {
 }
 
 impl Ray {
-    pub fn intersect(ray: &Ray, objects: &Vec<Shapes>) -> Option<Intersection> {
+    pub fn new(origin: Vector3, direction: Vector3) -> Ray {
+        Ray { origin, direction }
+    }
+
+    pub fn intersect(ray: &Ray, objects: &[Shapes]) -> Option<Intersection> {
         let mut distance = std::f64::INFINITY;
         let mut material = Material::neutral();
         let mut normal = Vector3::zero();
-        let mut hit = Vector3::zero();
+        let mut hit_point = Vector3::zero();
 
         for shape in objects {
             match shape.intersect(&ray) {
@@ -32,8 +36,8 @@ impl Ray {
                         distance = dist;
                         material = shape.material();
 
-                        hit = ray.origin + (ray.direction * distance);
-                        normal = shape.normal(hit);
+                        hit_point = ray.origin + (ray.direction * distance);
+                        normal = shape.normal(hit_point);
                     }
                 }
                 Option::None => (),
@@ -42,22 +46,17 @@ impl Ray {
 
         if distance < std::f64::INFINITY {
             Option::Some(Intersection {
-                distance: distance,
-                hit_point: hit,
-                normal: normal,
-                material: material,
+                distance,
+                hit_point,
+                normal,
+                material,
             })
         } else {
             Option::None
         }
     }
 
-    pub fn cast_ray(
-        ray: &Ray,
-        objects: &Vec<Shapes>,
-        lights: &Vec<Light>,
-        depth: u8,
-    ) -> Option<Color> {
+    pub fn cast_ray(ray: &Ray, objects: &[Shapes], lights: &[Light], depth: u8) -> Option<Color> {
         if depth >= 4 {
             return Option::None;
         }
@@ -69,10 +68,10 @@ impl Ray {
                 if intersection.material.reflectiveness > 0.0 {
                     let reflection = ray.direction.reflect(&intersection.normal).normalize();
 
-                    let reflected_ray = Ray {
-                        origin: intersection.hit_point + (intersection.normal * 1.001),
-                        direction: reflection,
-                    };
+                    let reflected_ray = Ray::new(
+                        intersection.hit_point + (intersection.normal * 1.001),
+                        reflection,
+                    );
 
                     match Ray::cast_ray(&reflected_ray, objects, lights, depth + 1) {
                         Option::Some(reflected_color) => {

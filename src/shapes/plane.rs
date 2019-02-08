@@ -21,12 +21,12 @@ impl Intersectable for Plane {
             let distance = v.dot(&self.normal) / denom;
 
             if distance >= 0.0 {
-                return Option::Some(distance);
+                Option::Some(distance)
             } else {
-                return Option::None;
+                Option::None
             }
         } else {
-            return Option::None;
+            Option::None
         }
     }
 

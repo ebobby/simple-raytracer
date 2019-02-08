@@ -19,9 +19,18 @@ pub enum LightType {
 }
 
 impl Light {
+    pub fn new(light_type: LightType, position: Vector3, intensity: f64, color: Color) -> Light {
+        Light {
+            light_type,
+            position,
+            intensity,
+            color,
+        }
+    }
+
     pub fn shade(
-        objects: &Vec<Shapes>,
-        lights: &Vec<Light>,
+        objects: &[Shapes],
+        lights: &[Light],
         intersection: &Intersection,
         direction: Vector3,
     ) -> Color {

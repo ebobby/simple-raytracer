@@ -54,24 +54,26 @@ impl Camera {
         let rate_h = vp_l / height_f;
 
         Camera {
-            origin: origin,
-            look_at: look_at,
-            vp_d: vp_d,
-            fov: fov,
-            roll: roll,
+            // Camera in the world
+            origin,
+            look_at,
+            vp_d,
+            fov,
+            roll,
 
-            width: width,
-            height: height,
+            // Image properties
+            width,
+            height,
 
-            w: w,
-            u: u,
-            v: v,
-
-            aspect_ratio: aspect_ratio,
-            vp_h: vp_h,
-            vp_l: vp_l,
-            rate_w: rate_w,
-            rate_h: rate_h,
+            // For ray direction calculations
+            w,
+            u,
+            v,
+            aspect_ratio,
+            vp_h,
+            vp_l,
+            rate_w,
+            rate_h,
         }
     }
 
@@ -79,11 +81,8 @@ impl Camera {
         let i = ((f64::from(x) + 0.5) * self.rate_w - self.vp_h) * self.aspect_ratio;
         let j = self.vp_h - ((f64::from(y) + 0.5) * self.rate_h);
 
-        let dir = (self.u * f64::from(i) + self.v * f64::from(j) - self.w * self.vp_d).normalize();
+        let direction = (self.u * i + self.v * j - self.w * self.vp_d).normalize();
 
-        Ray {
-            origin: self.origin,
-            direction: dir,
-        }
+        Ray::new(self.origin, direction)
     }
 }
