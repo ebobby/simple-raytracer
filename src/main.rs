@@ -31,9 +31,9 @@ fn main() {
             Vector3::new(0.0, 0.0, -20.0),
             1.0,
             60,
-            -30,
-            1024,
-            768,
+            0,
+            1920,
+            1080,
         ),
         objects: vec![
             Shapes::sphere(
@@ -102,5 +102,8 @@ fn main() {
 
     let duration = now.elapsed();
 
-    println!("{} milliseconds elapsed.", duration.as_secs() * 1000 + duration.subsec_millis() as u64);
+    println!(
+        "{} milliseconds elapsed.",
+        duration.as_secs() * 1000 + duration.subsec_millis() as u64
+    );
 }
