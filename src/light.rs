@@ -78,7 +78,7 @@ impl Light {
             }
         }
 
-        let mut factor = if crate::OPTIONS.diffuse | crate::OPTIONS.specular == false {
+        let mut factor = if !(crate::OPTIONS.diffuse | crate::OPTIONS.specular) {
             Vector3::new(1.0, 1.0, 1.0)
         } else {
             Vector3::zero()
