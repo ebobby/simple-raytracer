@@ -64,7 +64,7 @@ impl Light {
                         Option::Some(intersection) => light_dis <= intersection.distance,
                     };
 
-                    if hit_by_light {
+                    if hit_by_light || !crate::OPTIONS.shadows {
                         let light_reflection = (-light_dir).reflect(&intersection.normal);
                         let reflection_angle = -(light_reflection.dot(&direction));
 
@@ -78,6 +78,20 @@ impl Light {
             }
         }
 
-        mat.color * ((diff_light * mat.diffuse) + (spec_light * mat.specular))
+        let mut factor = if crate::OPTIONS.diffuse | crate::OPTIONS.specular == false {
+            Vector3::new(1.0, 1.0, 1.0)
+        } else {
+            Vector3::zero()
+        };
+
+        if crate::OPTIONS.diffuse {
+            factor = factor + (diff_light * mat.diffuse);
+        }
+
+        if crate::OPTIONS.specular {
+            factor = factor + (spec_light * mat.specular);
+        }
+
+        mat.color * factor
     }
 }

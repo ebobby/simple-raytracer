@@ -65,7 +65,7 @@ impl Ray {
             Option::Some(intersection) => {
                 let mut shaded_color = Light::shade(objects, lights, &intersection, ray.direction);
 
-                if intersection.material.reflectiveness > 0.0 {
+                if intersection.material.reflectiveness > 0.0 && crate::OPTIONS.reflections {
                     let reflection = ray.direction.reflect(&intersection.normal).normalize();
 
                     let reflected_ray = Ray::new(

@@ -22,6 +22,10 @@ use std::time::Instant;
 const OPTIONS: Options = Options {
     bias: 1e-6,
     max_rays: 4,
+    diffuse: true,
+    specular: true,
+    shadows: true,
+    reflections: true,
 };
 
 fn main() {
