@@ -36,18 +36,20 @@ impl Light {
     ) -> Color {
         let mat = intersection.material;
 
-        let mut diffuse_light = Color::new(0.0, 0.0, 0.0);
-        let mut specular_light = Color::new(0.0, 0.0, 0.0);
+        let mut diff_light = Color::new(0.0, 0.0, 0.0);
+        let mut spec_light = Color::new(0.0, 0.0, 0.0);
 
         for light in lights {
             match light.light_type {
-                LightType::Ambient => diffuse_light = diffuse_light + light.color * light.intensity,
+                LightType::Ambient => diff_light = diff_light + light.color * light.intensity,
                 LightType::Point => {
-                    let light_dir = (light.position - intersection.hit_point).normalize();
-                    let cos_angle = light_dir.dot(&intersection.normal).max(0.0);
+                    let light_vec = light.position - intersection.hit_point;
+                    let light_dir = light_vec.normalize();
+                    let light_dis = light_vec.length();
+                    let light_angle = light_dir.dot(&intersection.normal);
 
                     let light_ray = Ray {
-                        origin: if light_dir.dot(&intersection.normal) < 0.0 {
+                        origin: if light_angle < 0.0 {
                             intersection.hit_point.correct(&-intersection.normal)
                         } else {
                             intersection.hit_point.correct(&intersection.normal)
@@ -55,23 +57,27 @@ impl Light {
                         direction: light_dir,
                     };
 
-                    match Ray::intersect(&light_ray, objects) {
-                        Option::None => {
-                            diffuse_light =
-                                diffuse_light + light.color * (light.intensity * cos_angle);
+                    // This point gets hit by this light if there are no objects between us
+                    // or the object is farther away than the light.
+                    let hit_by_light = match Ray::intersect(&light_ray, objects) {
+                        Option::None => true,
+                        Option::Some(intersection) => light_dis <= intersection.distance,
+                    };
 
-                            specular_light = specular_light
-                                + light.color
-                                    * (-(-light_dir).reflect(&intersection.normal).dot(&direction))
-                                        .max(0.0)
-                                        .powf(mat.specular_exponent);
-                        }
-                        Option::Some(_) => (),
+                    if hit_by_light {
+                        let light_reflection = (-light_dir).reflect(&intersection.normal);
+                        let reflection_angle = -(light_reflection.dot(&direction));
+
+                        diff_light =
+                            diff_light + light.color * (light.intensity * light_angle.max(0.0));
+
+                        spec_light = spec_light
+                            + light.color * reflection_angle.max(0.0).powf(mat.specular_exponent);
                     }
                 }
             }
         }
 
-        mat.color * ((diffuse_light * mat.diffuse) + (specular_light * mat.specular))
+        mat.color * ((diff_light * mat.diffuse) + (spec_light * mat.specular))
     }
 }
