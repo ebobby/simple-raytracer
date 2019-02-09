@@ -104,6 +104,6 @@ fn main() {
 
     println!(
         "{} milliseconds elapsed.",
-        duration.as_secs() * 1000 + duration.subsec_millis() as u64
+        duration.as_secs() * 1000 + u64::from(duration.subsec_millis())
     );
 }
