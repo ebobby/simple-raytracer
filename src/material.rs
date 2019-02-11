@@ -44,11 +44,11 @@ impl Color {
         )
     }
 
-    pub fn to_rgb(&self) -> image::Rgb<u8> {
+    pub fn to_rgb(&self, gamma_correction: f64) -> image::Rgb<u8> {
         image::Rgb([
-            (self.x.min(1.0).max(0.0) * 255.0) as u8,
-            (self.y.min(1.0).max(0.0) * 255.0) as u8,
-            (self.z.min(1.0).max(0.0) * 255.0) as u8,
+            (self.x.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+            (self.y.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
+            (self.z.min(1.0).max(0.0).powf(gamma_correction) * 255.0) as u8,
         ])
     }
 }

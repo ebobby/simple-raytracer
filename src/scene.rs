@@ -16,6 +16,8 @@ impl Scene {
     pub fn render(&self, filename: String) {
         let mut imgbuf = image::ImageBuffer::new(self.camera.width, self.camera.height);
 
+        let gamma_correction = crate::OPTIONS.gamma.recip();
+
         // Iterate over the coordinates and pixels of the image
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
             let ray = self.camera.get_ray(x, y);
@@ -25,7 +27,7 @@ impl Scene {
                 Option::None => self.bg_color,
             };
 
-            *pixel = color.to_rgb();
+            *pixel = color.to_rgb(gamma_correction);
         }
 
         imgbuf.save(filename).unwrap();
