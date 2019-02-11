@@ -1,13 +1,13 @@
 use super::camera::Camera;
+use super::color::Color;
+use super::intersectable::Intersectable;
 use super::light::Light;
-use super::material::Color;
 use super::ray::Ray;
-use super::shapes::Shapes;
 
 #[derive(Debug)]
 pub struct Scene {
     pub camera: Camera,
-    pub objects: Vec<Shapes>,
+    pub objects: Vec<Box<dyn Intersectable>>,
     pub lights: Vec<Light>,
     pub bg_color: Color,
 }
@@ -22,12 +22,9 @@ impl Scene {
         for (x, y, pixel) in imgbuf.enumerate_pixels_mut() {
             let ray = self.camera.get_ray(x, y);
 
-            let color = match Ray::cast_ray(&ray, &self.objects, &self.lights, 0) {
-                Option::Some(color) => color,
-                Option::None => self.bg_color,
-            };
+            let color = Ray::cast_ray(ray, &self.objects, &self.lights, 0).unwrap_or(self.bg_color);
 
-            *pixel = color.to_rgb(gamma_correction);
+            *pixel = color.gamma_rgb(gamma_correction);
         }
 
         imgbuf.save(filename).unwrap();

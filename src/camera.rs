@@ -41,8 +41,8 @@ impl Camera {
         );
 
         let w = (origin - look_at).normalize();
-        let u = rotated_up.cross(&w).normalize();
-        let v = w.cross(&u).normalize();
+        let u = rotated_up.cross(w).normalize();
+        let v = w.cross(u).normalize();
 
         let width_f = f64::from(width);
         let height_f = f64::from(height);
@@ -83,6 +83,9 @@ impl Camera {
 
         let direction = (self.u * i + self.v * j - self.w * self.vp_d).normalize();
 
-        Ray::new(self.origin, direction)
+        Ray {
+            origin: self.origin,
+            direction,
+        }
     }
 }

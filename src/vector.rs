@@ -24,11 +24,11 @@ impl Vector3 {
         self.norm().sqrt()
     }
 
-    pub fn dot(&self, other: &Vector3) -> f64 {
+    pub fn dot(&self, other: Vector3) -> f64 {
         self.x * other.x + self.y * other.y + self.z * other.z
     }
 
-    pub fn cross(&self, other: &Vector3) -> Vector3 {
+    pub fn cross(&self, other: Vector3) -> Vector3 {
         Vector3 {
             x: self.y * other.z - self.z * other.y,
             y: self.z * other.x - self.x * other.z,
@@ -45,14 +45,14 @@ impl Vector3 {
         }
     }
 
-    pub fn reflect(&self, other: &Vector3) -> Vector3 {
-        *self - *other * other.dot(self) * 2.0
+    pub fn reflect(&self, other: Vector3) -> Vector3 {
+        *self - other * other.dot(*self) * 2.0
     }
 
     /// Due to numerical precision sometimes we need to nudge vectors
     /// a little bit into a given direction.
-    pub fn correct(&self, other: &Vector3) -> Vector3 {
-        *self + (*other * crate::OPTIONS.bias)
+    pub fn correct(&self, other: Vector3) -> Vector3 {
+        *self + (other * crate::OPTIONS.bias)
     }
 }
 

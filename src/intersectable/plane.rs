@@ -12,22 +12,26 @@ pub struct Plane {
 }
 
 impl Intersectable for Plane {
-    fn intersect(&self, ray: &Ray) -> Option<f64> {
-        let denom = self.normal.dot(&ray.direction);
+    fn intersect(&self, ray: Ray) -> Option<f64> {
+        let denom = self.normal.dot(ray.direction);
 
         if denom > crate::OPTIONS.bias {
             let v = self.position - ray.origin;
 
-            let distance = v.dot(&self.normal) / denom;
+            let distance = v.dot(self.normal) / denom;
 
             if distance >= 0.0 {
-                Option::Some(distance)
+                Some(distance)
             } else {
-                Option::None
+                None
             }
         } else {
-            Option::None
+            None
         }
+    }
+
+    fn material(&self) -> Material {
+        self.material
     }
 
     fn normal(&self, _point: Vector3) -> Vector3 {
