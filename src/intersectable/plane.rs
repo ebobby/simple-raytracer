@@ -15,7 +15,7 @@ impl Intersectable for Plane {
     fn intersect(&self, ray: Ray) -> Option<f64> {
         let denom = self.normal.dot(ray.direction);
 
-        if denom > crate::OPTIONS.bias {
+        if denom.abs() > crate::EPSILON {
             let v = self.position - ray.origin;
 
             let distance = v.dot(self.normal) / denom;

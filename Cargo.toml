@@ -1,6 +1,6 @@
 [package]
-name = "simple-raytracer"
-version = "0.1.0"
+name = "raytracer"
+version = "0.5.0"
 authors = ["Francisco Soto <ebobby@ebobby.org>"]
 edition = "2018"
 

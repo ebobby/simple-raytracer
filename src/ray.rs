@@ -2,6 +2,7 @@ use super::color::Color;
 use super::intersectable::Intersectable;
 use super::light::Light;
 use super::material::Material;
+use super::options::Options;
 use super::vector::Vector3;
 
 #[derive(Clone, Copy, Debug)]
@@ -53,17 +54,18 @@ impl Ray {
         ray: Ray,
         objects: &[Box<dyn Intersectable>],
         lights: &[Light],
+        options: &Options,
         depth: u8,
     ) -> Option<Color> {
-        if depth >= crate::OPTIONS.max_rays {
+        if depth >= options.max_rays {
             return None;
         }
 
         let intersection = Ray::intersect(ray, objects)?;
 
-        let mut shaded_color = Light::shade(objects, lights, intersection, ray.direction);
+        let mut shaded_color = Light::shade(objects, lights, options, intersection, ray.direction);
 
-        if intersection.material.reflectiveness > 0.0 && crate::OPTIONS.reflections {
+        if intersection.material.reflectiveness > 0.0 && options.reflections {
             let reflection = ray.direction.reflect(intersection.normal).normalize();
 
             let reflected_ray = Ray {
@@ -71,7 +73,8 @@ impl Ray {
                 direction: reflection,
             };
 
-            if let Some(reflected_color) = Ray::cast_ray(reflected_ray, objects, lights, depth + 1)
+            if let Some(reflected_color) =
+                Ray::cast_ray(reflected_ray, objects, lights, options, depth + 1)
             {
                 shaded_color += reflected_color * intersection.material.reflectiveness;
             }

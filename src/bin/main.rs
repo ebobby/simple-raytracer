@@ -1,37 +1,26 @@
-mod camera;
-mod color;
-mod intersectable;
-mod light;
-mod material;
-mod options;
-mod ray;
-mod scene;
-mod vector;
-
-use camera::Camera;
-use color::Color;
-use intersectable::plane::Plane;
-use intersectable::sphere::Sphere;
-use light::Light;
-use light::LightType;
-use material::Material;
-use options::Options;
-use scene::Scene;
-use vector::Vector3;
+use raytracer::camera::Camera;
+use raytracer::color::Color;
+use raytracer::intersectable::plane::Plane;
+use raytracer::intersectable::sphere::Sphere;
+use raytracer::light::Light;
+use raytracer::light::LightType;
+use raytracer::material::Material;
+use raytracer::options::Options;
+use raytracer::scene::Scene;
+use raytracer::vector::Vector3;
 
 use std::time::Instant;
 
-const OPTIONS: Options = Options {
-    bias: 1e-6,
-    max_rays: 4,
-    gamma: 1.2,
-    diffuse: true,
-    specular: true,
-    shadows: true,
-    reflections: true,
-};
-
 fn main() {
+    let options = Options {
+        max_rays: 4,
+        gamma: 0.85,
+        diffuse: true,
+        specular: true,
+        shadows: true,
+        reflections: true,
+    };
+
     let scene = Scene {
         camera: Camera::new(
             Vector3::new(0.0, -3.0, 5.0),
@@ -92,7 +81,7 @@ fn main() {
                 radius: 5.0,
                 material: Material {
                     color: Color::new(0.1, 0.1, 0.1),
-                    diffuse: 0.5,
+                    diffuse: 0.0,
                     specular: 50.0,
                     specular_exponent: 100.0,
                     reflectiveness: 1.0,
@@ -137,6 +126,7 @@ fn main() {
             },
         ],
         bg_color: Color::black(),
+        options,
     };
 
     let now = Instant::now();

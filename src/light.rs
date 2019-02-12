@@ -1,5 +1,6 @@
 use super::color::Color;
 use super::intersectable::Intersectable;
+use super::options::Options;
 use super::ray::Intersection;
 use super::ray::Ray;
 use super::vector::Vector3;
@@ -22,6 +23,7 @@ impl Light {
     pub fn shade(
         objects: &[Box<dyn Intersectable>],
         lights: &[Light],
+        options: &Options,
         intersection: Intersection,
         direction: Vector3,
     ) -> Color {
@@ -55,7 +57,7 @@ impl Light {
                         Some(intersection) => light_dis <= intersection.distance,
                     };
 
-                    if hit_by_light || !crate::OPTIONS.shadows {
+                    if hit_by_light || !options.shadows {
                         let light_reflection = (-light_dir).reflect(intersection.normal);
                         let angle = -(light_reflection.dot(direction));
 
@@ -66,17 +68,17 @@ impl Light {
             }
         }
 
-        let mut factor = if !(crate::OPTIONS.diffuse | crate::OPTIONS.specular) {
+        let mut factor = if !(options.diffuse | options.specular) {
             Color::white()
         } else {
             Color::black()
         };
 
-        if crate::OPTIONS.diffuse {
+        if options.diffuse {
             factor += diff_light * mat.diffuse;
         }
 
-        if crate::OPTIONS.specular {
+        if options.specular {
             factor += spec_light * mat.specular;
         }
 

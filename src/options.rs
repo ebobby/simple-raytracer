@@ -1,6 +1,5 @@
 #[derive(Debug)]
 pub struct Options {
-    pub bias: f64,
     pub max_rays: u8,
     pub gamma: f64,
     pub diffuse: bool,
