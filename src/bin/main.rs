@@ -21,14 +21,19 @@ fn main() {
         reflections: true,
     };
 
+    let width = 1920;
+    let height = 1080;
+    let aspect_ratio = width as f64 / height as f64;
+
     let scene = Scene {
+        width,
+        height,
         camera: Camera::new(
-            Vec3::new(0.0, -3.0, 5.0),
-            Vec3::new(0.0, 0.0, -20.0),
-            60,
-            45,
-            1920,
-            1080,
+            Vec3::new(0., -3., 5.),
+            Vec3::new(0., 0., -20.),
+            60.,
+            aspect_ratio,
+            45.,
         ),
         objects: vec![
             Box::new(Sphere {
