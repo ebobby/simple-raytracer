@@ -1,13 +1,13 @@
 use crate::material::Material;
 use crate::ray::Ray;
-use crate::vector::Vector3;
+use crate::vector::Vec3;
 
 use super::Intersectable;
 
 #[derive(Debug)]
 pub struct Plane {
-    pub position: Vector3,
-    pub normal: Vector3,
+    pub position: Vec3,
+    pub normal: Vec3,
     pub material: Material,
 }
 
@@ -34,7 +34,7 @@ impl Intersectable for Plane {
         self.material
     }
 
-    fn normal(&self, _point: Vector3) -> Vector3 {
+    fn normal(&self, _point: Vec3) -> Vec3 {
         -self.normal
     }
 }

@@ -3,19 +3,19 @@ use super::intersectable::Intersectable;
 use super::light::Light;
 use super::material::Material;
 use super::options::Options;
-use super::vector::Vector3;
+use super::vector::Vec3;
 
 #[derive(Clone, Copy, Debug)]
 pub struct Ray {
-    pub origin: Vector3,
-    pub direction: Vector3,
+    pub origin: Vec3,
+    pub direction: Vec3,
 }
 
 #[derive(Clone, Copy, Debug)]
 pub struct Intersection {
     pub distance: f64,
-    pub hit_point: Vector3,
-    pub normal: Vector3,
+    pub hit_point: Vec3,
+    pub normal: Vec3,
     pub material: Material,
 }
 
@@ -23,8 +23,8 @@ impl Ray {
     pub fn intersect(ray: Ray, objects: &[Box<dyn Intersectable>]) -> Option<Intersection> {
         let mut distance = std::f64::INFINITY;
         let mut material = Material::neutral();
-        let mut normal = Vector3::zero();
-        let mut hit_point = Vector3::zero();
+        let mut normal = Vec3::zero();
+        let mut hit_point = Vec3::zero();
 
         for shape in objects {
             if let Some(dist) = shape.intersect(ray) {

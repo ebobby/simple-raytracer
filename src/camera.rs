@@ -1,20 +1,20 @@
 use super::ray::Ray;
-use super::vector::Vector3;
+use super::vector::Vec3;
 
 #[derive(Debug)]
 pub struct Camera {
     pub width: u32,       // image width
     pub height: u32,      // image height
-    pub origin: Vector3,  // camera eye location
-    pub look_at: Vector3, // camera looking at
-    pub vp_d: f64,        // view plane distance from the eye
+    pub origin: Vec3,  // camera eye location
+    pub look_at: Vec3, // camera looking at
     pub fov: i16,         // field of view
     pub roll: i16,        // roll angle
 
-    w: Vector3, // camera coordinate system
-    u: Vector3, // camera coordinate system
-    v: Vector3, // camera coordinate system
+    w: Vec3, // camera coordinate system
+    u: Vec3, // camera coordinate system
+    v: Vec3, // camera coordinate system
 
+    vp_d: f64,        // view plane distance from the eye
     aspect_ratio: f64, // aspect ratio
     vp_h: f64,         // view plane length / 2
     vp_l: f64,         // view plane length
@@ -24,20 +24,19 @@ pub struct Camera {
 
 impl Camera {
     pub fn new(
-        origin: Vector3,
-        look_at: Vector3,
-        vp_d: f64,
+        origin: Vec3,
+        look_at: Vec3,
         fov: i16,
         roll: i16,
         width: u32,
         height: u32,
     ) -> Camera {
-        let up = Vector3::new(0.0, 1.0, 0.0);
+        let up = Vec3::new(0.0, 1.0, 0.0);
         let ra = f64::from(roll).to_radians();
-        let rotated_up = Vector3::new(
-            up.x * ra.cos() - up.y * ra.sin(),
-            up.x * ra.sin() + up.y * ra.cos(),
-            up.z,
+        let rotated_up = Vec3::new(
+            -ra.sin(),
+            ra.cos(),
+            0.0,
         );
 
         let w = (origin - look_at).normalize();
@@ -48,6 +47,7 @@ impl Camera {
         let height_f = f64::from(height);
         let aspect_ratio = width_f / height_f;
 
+        let vp_d = 1.0;
         let vp_h = vp_d * (f64::from(fov).to_radians() / 2.0).tan();
         let vp_l = vp_h * 2.0;
         let rate_w = vp_l / width_f;
@@ -57,7 +57,6 @@ impl Camera {
             // Camera in the world
             origin,
             look_at,
-            vp_d,
             fov,
             roll,
 
@@ -70,6 +69,7 @@ impl Camera {
             u,
             v,
             aspect_ratio,
+            vp_d,
             vp_h,
             vp_l,
             rate_w,

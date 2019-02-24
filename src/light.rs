@@ -3,12 +3,12 @@ use super::intersectable::Intersectable;
 use super::options::Options;
 use super::ray::Intersection;
 use super::ray::Ray;
-use super::vector::Vector3;
+use super::vector::Vec3;
 
 #[derive(Debug)]
 pub struct Light {
     pub light_type: LightType,
-    pub position: Vector3,
+    pub position: Vec3,
     pub intensity: f64,
     pub color: Color,
 }
@@ -25,7 +25,7 @@ impl Light {
         lights: &[Light],
         options: &Options,
         intersection: Intersection,
-        direction: Vector3,
+        direction: Vec3,
     ) -> Color {
         let mat = intersection.material;
 

@@ -1,11 +1,11 @@
 use super::Intersectable;
 use crate::material::Material;
 use crate::ray::Ray;
-use crate::vector::Vector3;
+use crate::vector::Vec3;
 
 #[derive(Debug)]
 pub struct Sphere {
-    pub position: Vector3,
+    pub position: Vec3,
     pub radius: f64,
     pub material: Material,
 }
@@ -43,7 +43,7 @@ impl Intersectable for Sphere {
         self.material
     }
 
-    fn normal(&self, point: Vector3) -> Vector3 {
+    fn normal(&self, point: Vec3) -> Vec3 {
         (point - self.position).normalize()
     }
 }
