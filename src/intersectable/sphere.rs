@@ -12,31 +12,29 @@ pub struct Sphere {
 
 impl Intersectable for Sphere {
     fn intersect(&self, ray: Ray) -> Option<f64> {
-        let voc = self.position - ray.origin; // Vector from the origin to the sphere center
-        let voc_len_sqr = voc.dot(voc); // The length squared of voc
-        let vod_len = voc.dot(ray.direction); // The length of the projected vector voc into the ray direction
 
-        let a_sqr = voc_len_sqr - (vod_len * vod_len); // The length squared of the line between c and the ray
-        let r_sqr = self.radius * self.radius; // Radius squared
+        let oc = ray.origin - self.position;
+        let a = ray.direction.dot(ray.direction);
+        let b = oc.dot(ray.direction);
+        let c = oc.dot(oc) - self.radius * self.radius;
+        let discriminant = b * b - a * c;
+        let mut temp: f64;
 
-        // the ray is inside the sphere
-        if a_sqr <= self.radius * self.radius {
-            let b = (r_sqr - a_sqr).sqrt(); // the distance between o and the intersection with the sphere
+        if discriminant > 0.0 {
+            temp = (-b - discriminant.sqrt()) / a;
 
-            let distance = if vod_len - b < 0.0 {
-                vod_len + b
-            } else {
-                vod_len - b
-            };
-
-            if distance > 0.0 {
-                Some(distance)
-            } else {
-                None
+            if temp < std::f64::INFINITY && temp > crate::EPSILON {
+                return Some(temp)
             }
-        } else {
-            None
         }
+
+        temp = (-b + discriminant.sqrt()) / a;
+
+        if temp < std::f64::INFINITY && temp > crate::EPSILON {
+            return Some(temp)
+        }
+
+        None
     }
 
     fn material(&self) -> Material {
