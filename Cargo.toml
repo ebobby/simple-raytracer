@@ -5,4 +5,4 @@ authors = ["Francisco Soto <ebobby@ebobby.org>"]
 edition = "2018"
 
 [dependencies]
-image = "0.21.0"
+image = "0.24.3"
