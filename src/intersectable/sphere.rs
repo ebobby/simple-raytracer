@@ -12,7 +12,6 @@ pub struct Sphere {
 
 impl Intersectable for Sphere {
     fn intersect(&self, ray: Ray) -> Option<f64> {
-
         let oc = ray.origin - self.position;
         let a = ray.direction.dot(ray.direction);
         let b = oc.dot(ray.direction);
@@ -24,14 +23,14 @@ impl Intersectable for Sphere {
             temp = (-b - discriminant.sqrt()) / a;
 
             if temp < std::f64::INFINITY && temp > crate::EPSILON {
-                return Some(temp)
+                return Some(temp);
             }
         }
 
         temp = (-b + discriminant.sqrt()) / a;
 
         if temp < std::f64::INFINITY && temp > crate::EPSILON {
-            return Some(temp)
+            return Some(temp);
         }
 
         None

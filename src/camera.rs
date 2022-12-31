@@ -40,8 +40,7 @@ impl Camera {
     }
 
     pub fn get_ray(&self, s: f64, t: f64) -> Ray {
-        let direction =
-            self.corner + (self.horizontal * s) + (self.vertical * t) - self.origin;
+        let direction = self.corner + (self.horizontal * s) + (self.vertical * t) - self.origin;
 
         Ray {
             origin: self.origin,
